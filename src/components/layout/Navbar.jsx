@@ -53,7 +53,7 @@ export default function Navbar() {
             INQUIRY
           </NavLink>
           <button
-            className="md:hidden text-on-surface p-2"
+            className="hidden text-on-surface p-2"
             aria-label="Open menu"
             onClick={() => setMenuOpen(true)}
           >

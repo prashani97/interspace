@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import SectionLabel from '../components/ui/SectionLabel';
 import RevealUp from '../components/ui/RevealUp';
 
@@ -27,6 +28,12 @@ const philosophy = [
 export default function About() {
   return (
     <div className="architectural-grid">
+      <Helmet>
+        <title>About — Interspace Design Studio</title>
+        <meta name="description" content="Interspace Design Studio — 7 years of architectural precision, 42 projects across 8 countries. Meet principal architect Ishan Hasara." />
+        <meta property="og:title" content="About — Interspace Design Studio" />
+        <meta property="og:description" content="Meet the mind behind Interspace. Architectural precision and minimalist luxury since 2018." />
+      </Helmet>
       {/* Principal Section */}
       <section className="pt-48 pb-section-gap px-margin-mobile md:px-margin-desktop">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-end">

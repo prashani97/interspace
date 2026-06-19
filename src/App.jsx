@@ -1,4 +1,5 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
@@ -8,6 +9,7 @@ import Contact from './pages/Contact';
 
 export default function App() {
   return (
+    <HelmetProvider>
     <HashRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -19,5 +21,6 @@ export default function App() {
         </Route>
       </Routes>
     </HashRouter>
+    </HelmetProvider>
   );
 }

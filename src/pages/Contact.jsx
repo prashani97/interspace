@@ -1,11 +1,22 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SectionLabel from '../components/ui/SectionLabel';
 import RevealUp from '../components/ui/RevealUp';
+
+const STUDIO_EMAIL = 'studio@interspace.design';
 
 const STUDIO_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeJ45REppBxt8jXc7NEilwq02IhCFoCx8Sz7sOXlIpu4mTxWciXsD_a5tqSuTu1idAaCeDvL8pqODeQRyS1ZcZPPBk6KW_EAPG3kZU0IJWMVJwarHhCAoaV365Xp8Tw0DZR0ep10JXmeOD5lgnLNPio6Rvno8nDo5n7Z5vO7JUmUVsM0ohdkbzzNLHGDQPMxydwZr3nNjJpDetZhnYQWr58El-LHvaf3k5Lugv_Ujle74qDk4mon4xbl10v6rBW_Kq9DkyaWBD5DQ';
 
 export default function Contact() {
   const [status, setStatus] = useState('idle');
+  const [copied, setCopied] = useState(false);
+
+  function copyEmail() {
+    navigator.clipboard.writeText(STUDIO_EMAIL).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -29,6 +40,13 @@ export default function Contact() {
 
   return (
     <>
+      <Helmet>
+        <title>Contact — Interspace Design Studio</title>
+        <meta name="description" content="Begin your architectural journey. Reach out to Interspace Design Studio to discuss your residential, commercial, or hospitality project." />
+        <meta property="og:title" content="Contact — Interspace Design Studio" />
+        <meta property="og:description" content="Begin your architectural journey. Reach out to discuss your project or visit our studio for a private consultation." />
+      </Helmet>
+
       {/* Hero */}
       <section className="pt-48 pb-24 px-margin-mobile md:px-margin-desktop">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
@@ -159,12 +177,19 @@ export default function Contact() {
                 </h3>
               </div>
               <div className="space-y-2">
-                <a
-                  href="mailto:studio@interspace.design"
-                  className="block font-body-lg text-body-lg hover:text-primary transition-colors"
+                <button
+                  onClick={copyEmail}
+                  title="Copy email address"
+                  className="flex items-center gap-2 font-body-lg text-body-lg hover:text-primary transition-colors group text-left"
                 >
-                  studio@interspace.design
-                </a>
+                  {STUDIO_EMAIL}
+                  <span className="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:text-primary transition-colors">
+                    {copied ? 'check' : 'content_copy'}
+                  </span>
+                  {copied && (
+                    <span className="font-label-caps text-label-caps text-primary text-[10px]">COPIED</span>
+                  )}
+                </button>
                 <a
                   href="tel:+12128880000"
                   className="block font-body-lg text-body-lg hover:text-primary transition-colors"

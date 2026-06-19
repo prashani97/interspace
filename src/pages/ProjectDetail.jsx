@@ -1,18 +1,62 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { projects } from '../data/projects';
 import RevealUp from '../components/ui/RevealUp';
 import SectionLabel from '../components/ui/SectionLabel';
 
+function LazyImage({ src, alt, className, style }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className={`relative ${className ?? ''}`} style={style}>
+      {!loaded && <div className="absolute inset-0 skeleton" />}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </div>
+  );
+}
+
 export default function ProjectDetail() {
   const { id } = useParams();
-  const project = projects.find((p) => p.id === id);
+  const [progress, setProgress] = useState(0);
 
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.documentElement;
+      const scrolled = el.scrollTop || document.body.scrollTop;
+      const total = el.scrollHeight - el.clientHeight;
+      setProgress(total > 0 ? (scrolled / total) * 100 : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const project = projects.find((p) => p.id === id);
   if (!project) return <Navigate to="/projects" replace />;
 
   const nextProject = projects.find((p) => p.id === project.nextProject);
 
   return (
     <>
+      <Helmet>
+        <title>{project.title} — Interspace Design Studio</title>
+        <meta name="description" content={project.excerpt} />
+        <meta property="og:title" content={`${project.title} — Interspace Design Studio`} />
+        <meta property="og:description" content={project.excerpt} />
+        <meta property="og:image" content={project.coverImage} />
+        <meta property="og:type" content="article" />
+      </Helmet>
+
+      {/* Scroll progress bar */}
+      <div
+        className="fixed top-0 left-0 z-[60] h-[2px] bg-primary transition-none"
+        style={{ width: `${progress}%` }}
+      />
+
       {/* Hero */}
       <section className="relative pt-24 h-[70vh] min-h-[500px] flex items-end overflow-hidden">
         <div
@@ -20,6 +64,16 @@ export default function ProjectDetail() {
           style={{ backgroundImage: `url('${project.heroImage}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+
+        {/* Breadcrumb */}
+        <div className="absolute top-0 left-0 right-0 pt-24 px-margin-mobile md:px-margin-desktop pb-4 z-10">
+          <nav className="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant/70 text-[10px]">
+            <Link to="/projects" className="hover:text-primary transition-colors">WORK</Link>
+            <span>/</span>
+            <span>{project.title.toUpperCase()}</span>
+          </nav>
+        </div>
+
         <div className="relative z-10 px-margin-mobile md:px-margin-desktop pb-16 w-full">
           <div className="flex gap-3 mb-4">
             <span className="px-3 py-1 border border-primary/40 text-primary font-label-caps text-[10px]">
@@ -39,9 +93,10 @@ export default function ProjectDetail() {
       <section className="py-section-gap px-margin-mobile md:px-margin-desktop">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
           <RevealUp className="md:col-span-7 overflow-hidden">
-            <div
-              className="aspect-[4/3] bg-cover bg-center"
-              style={{ backgroundImage: `url('${project.gallery[0]}')` }}
+            <LazyImage
+              src={project.gallery[0]}
+              alt={project.title}
+              className="aspect-[4/3]"
             />
           </RevealUp>
           <RevealUp delay={200} className="md:col-span-5 md:pt-12">
@@ -81,9 +136,10 @@ export default function ProjectDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {project.gallery.map((src, i) => (
             <RevealUp key={i} delay={i * 100}>
-              <div
-                className="aspect-[4/3] bg-cover bg-center"
-                style={{ backgroundImage: `url('${src}')` }}
+              <LazyImage
+                src={src}
+                alt={`${project.title} — image ${i + 1}`}
+                className="aspect-[4/3]"
               />
             </RevealUp>
           ))}
