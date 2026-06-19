@@ -5,7 +5,7 @@ import { useNavScroll } from '../../hooks/useNavScroll';
 const navLinks = [
   { to: '/', label: 'HOME', end: true },
   { to: '/projects', label: 'WORK' },
-  { to: '/about', label: 'ABOUT US' },
+  { to: '/about', label: 'ABOUT' },
   { to: '/contact', label: 'CONTACT' },
 ];
 
