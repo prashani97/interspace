@@ -13,8 +13,8 @@ export default function Navbar() {
   const isScrolled = useNavScroll();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const activeCls = 'text-primary border-b border-primary pb-0.5';
-  const inactiveCls = 'text-on-surface-variant hover:text-primary transition-colors duration-300';
+  const activeCls = 'text-primary hover-line';
+  const inactiveCls = 'text-on-surface-variant hover:text-primary transition-colors duration-300 hover-line';
 
   return (
     <>
