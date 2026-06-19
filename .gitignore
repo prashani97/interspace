@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+.env
+
+# Design source files (not part of the deployable site)
+stitch_interspace_design_portfolio/
+assets/
+
+# Original logo (copied to public/images/logo.jpeg)
+WhatsApp Image 2026-06-03 at 00.12.14(1).jpeg
+
+# Claude Code internal files
+.claude/
